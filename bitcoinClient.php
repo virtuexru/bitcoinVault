@@ -28,15 +28,16 @@ class bitcoinClient extends bitcoinVault {
 	private function convertCoinToUsd($price, $coin) {
 		$convert_url = "https://btc-e.com/api/2/" . $this->coinDict[$coin] . "_usd/ticker";
 
-		// Initiate curl
+		// init curl
 		$ch = curl_init();
 
+		// curl options
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_URL, $convert_url);
 
 		try {
-			// Execute
+			// execute
 			$result = curl_exec($ch);
 			$prices = json_decode($result, true);
 
@@ -137,20 +138,9 @@ class bitcoinClient extends bitcoinVault {
 	 * @param  string $account
 	 * @return getnewaddress() response jSONrpc
 	 */
-	public function bulkGetNewAddress(array $coins, $account) {
+	public function bulkGetNewAddress($coin, $account) {
 		try {
-			foreach($coins as $coin) {
-				${'new_account_' . $coin} = $this->$coin->getnewaddress($account);
-			}
-
-			$sql = "INSERT INTO wallets (member, btc, ltc) VALUES (:account, :address_btc, :address_ltc)";
-			$stmt = $this->dbc->prepare($sql);
-
-			if($stmt->execute(array(':account' => $account, ':address_btc' => $new_account_bitcoin, ':address_ltc' => $new_account_litecoin))) {
-				return array('bitcoin' => $new_account_bitcoin, 'litecoin' => $new_account_litecoin);
-			} else {
-				return false;
-			}
+			return $this->$coin->getnewaddress($account);
 		} catch(CoinException $e) {
 			throw $e;
 		}
@@ -173,12 +163,6 @@ class bitcoinClient extends bitcoinVault {
 		foreach($this->$coin->listaccounts() as $account => $amount) {
 			echo (empty($account) ? '[null]' : $account) . ': ' . $amount . '<br />';
 		}
-		/*
-		while(list($name, $val) = @each()) {
-			echo $name . ': ' . $val . '<br />';
-		}
-		return true;
-		*/
 	}
 
 	/**
