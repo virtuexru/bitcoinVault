@@ -126,7 +126,7 @@ class bitcoinClient extends bitcoinVault {
 
 	/**
 	 * testing grabbing getInstance() [protected]
-	 * method from Parent [coinVault] class
+	 * method from Parent [bitcoinVault] class
 	 */
 	public function getInstance() {
 		return Parent::getInstance();

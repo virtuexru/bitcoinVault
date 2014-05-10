@@ -10,7 +10,7 @@ class bitcoinVault {
 	 * @var pool: list of connections to construct
 	 * TODO: possibility to add more coins to the pool [array('bitcoin' => '8332', 'litecoin' => '9332')]
 	 */
-	private static $_pool = array('bitcoin' => '8332');
+	private static $_coinPool = array('bitcoin' => '8332');
 
 	/**
 	 * @var activeCoins: key names of all current coins
@@ -51,7 +51,7 @@ class bitcoinVault {
 		$this->setActiveCoins();
 
 		try {
-			foreach (self::$_pool as $prefix => $port) {
+			foreach (self::$_coinPool as $prefix => $port) {
 				// create the actual connection to bitcoind using the coin name
 				// usage: $this->bitcoin->(arg)
 				$this->{$prefix} = new jsonRPCClient('http://' . self::$_username . ':' . self::$_password . '@' . self::$_serveraddress . ':' . $port);
@@ -72,7 +72,7 @@ class bitcoinVault {
 	 * gathers our active coins set in pool
 	 */
 	protected function setActiveCoins() {
-		$this->activeCoins = array_keys(self::$_pool);
+		$this->activeCoins = array_keys(self::$_coinPool);
 	}
 
 	/**
