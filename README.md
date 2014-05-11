@@ -4,9 +4,20 @@
 This PHP Bitcoin API extends the JSON RPC Client to communicate with a [Bitcoind server](https://en.bitcoin.it/wiki/Bitcoind).
 
 ### Usage
-Use the bitcoinClient in the /src/ folder to create a new connection to a bitcoind server that you have running. I will be adding an example.php file in the root directory that can be used as a guide.
+Use the index.php file as a starting point or just copy and paste from here:
+
+```php
+<?php
+spl_autoload_register();
+
+// init
+$client = new bitcoinVault\bitcoinClient();
+
+// then for example, pull your bitcoind server stats:
+$client->getInfo('bitcoin');
+?>
+```
 
 ### Requirements
 + PHP5
 + cURL support
-+ SSL support (if you're using HTTPS to talk to bitcoind)
