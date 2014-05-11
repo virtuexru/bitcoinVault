@@ -1,5 +1,6 @@
-# bitcoinVault - open source PHP Bitcoin API Client
-==============================
+# bitcoinVault
+## an open source PHP Bitcoin API Client
+=========
 
 ### PHP Bitcoin API 
 extends the JSON RPC Client to communicate with a [Bitcoind server](https://en.bitcoin.it/wiki/Bitcoind).
