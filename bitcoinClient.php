@@ -25,7 +25,7 @@ class bitcoinClient extends bitcoinVault {
 	 * @param  string $coin
 	 * @return int last btc-e price * btc given
 	 */
-	private function convertCoinToUsd($price, $coin) {
+	public function convertCoinToUsd($price, $coin) {
 		$convert_url = "https://btc-e.com/api/2/" . $this->coinDict[$coin] . "_usd/ticker";
 
 		// init curl
@@ -173,31 +173,4 @@ class bitcoinClient extends bitcoinVault {
 	public function listTransactions($coin, $account='') {
 		return $this->$coin->listtransactions($account);
 	}
-
-	/**
-	 *
-	 */
-	public function _moveCoin($coin, $amount=0, $from_account, $to_account) {
-		try {
-			$this->moveCoin($coin, $amount, $from_account, $to_account);
-			return true;
-		} catch (CoinException $e) {
-			echo $e->getMessage() . "<br />";
-    		return false;
-		}
-	}
-
-	/**
-	 *
-	 */
-	public function _sendCoin($coin, $amount=0, $from_account, $to_account) {
-		try {
-			$this->sendCoin($coin, $amount, $from_account, $to_account);
-			return true;
-		} catch (CoinException $e) {
-			echo $e->getMessage() . "<br />";
-    		return false;
-		}
-	}
-
 }
