@@ -17,7 +17,7 @@ spl_autoload_register();
 $client = new bitcoinVault\bitcoinClient();
 
 // then for example, pull your bitcoind server stats:
-$client->getInfo('bitcoin');
+$client->getInfo();
 ?>
 ```
 
