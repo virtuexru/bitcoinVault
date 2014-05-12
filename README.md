@@ -14,7 +14,8 @@ Use the index.php file as a starting point or just copy and paste from here:
 spl_autoload_register();
 
 // init
-$client = new bitcoinVault\bitcoinClient();
+use bitcoinVault\bitcoinClient as bitcoinClient;
+$client = new bitcoinClient();
 
 // then for example, pull your bitcoind server stats:
 $client->getInfo();

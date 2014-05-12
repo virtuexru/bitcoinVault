@@ -2,7 +2,8 @@
 
 spl_autoload_register();
 
-$client = new bitcoinVault\bitcoinClient();
+use bitcoinVault\bitcoinClient as bitcoinClient;
+$client = new bitcoinClient();
 
 $client->getInfo();
 
