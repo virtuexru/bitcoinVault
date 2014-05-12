@@ -16,8 +16,8 @@ class bitcoinClient extends bitcoinVault {
 	 * @param  string $destination
 	 * @return backupWallet() response jSONrpc
 	 */
-	public function backupWallet($coin, $destination) {
-		return $this->$coin->backupwallet($destination);
+	public function backupWallet($destination) {
+		return $this->bitcoin->backupwallet($destination);
 	}
 
 	/**
@@ -83,15 +83,6 @@ class bitcoinClient extends bitcoinVault {
 	}
 
 	/**
-	 * calls getinfo on {coin}d
-	 */
-	public function getAllCoinInfo() {
-		foreach($this->activeCoins as $coin) {
-			echo $coin . ': ' . $this->$coin->getblockcount() . '<br />';
-		}
-	}
-
-	/**
 	 * @param  string $coin
 	 * @return getbalance() response jSONrpc
 	 */
@@ -119,8 +110,8 @@ class bitcoinClient extends bitcoinVault {
 	 * @param  string $coin
 	 * @return getinfo() response jSONrpc
 	 */
-	public function getInfo($coin) {
-		foreach($this->$coin->getinfo() as $key => $item) {
+	public function getInfo() {
+		foreach($this->bitcoin->getinfo() as $key => $item) {
 			echo (empty($key) ? '[null]' : $key) . ': ' . (empty($item) ? '0' : $item) . '<br />';
 		}
 	}

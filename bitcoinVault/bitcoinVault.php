@@ -7,17 +7,6 @@ use \Exception as CoinException;
 
 class bitcoinVault {
 	/**
-	 * @var pool: list of connections to construct
-	 * TODO: possibility to add more coins to the pool [array('bitcoin' => '8332', 'litecoin' => '9332')]
-	 */
-	private static $_coinPool = array('bitcoin' => '8332');
-
-	/**
-	 * @var activeCoins: key names of all current coins
-	 */
-	protected $activeCoins;
-
-	/**
 	 * @var instance: singleton instance of the class
 	 */
 	private static $instance;
@@ -28,14 +17,16 @@ class bitcoinVault {
 	protected $bitcoin;
 
 	/**
+	 * @var port: bitcoind port
 	 * @var username: bitcoind username
 	 * @var password: bitcoin password
 	 * !note: username/pass should be loaded in from disk
 	 * @var serveraddress: IP address of bitcoind
 	 */
+	private static $_port = '8332';
 	private static $_username = "tester";
 	private static $_password = "apple";
-	private static $_serveraddress = "0.0.0.0";
+	private static $_serveraddress = "192.168.0.13";
 
 	/**
 	 * @var algo: blowfish used for encryption
@@ -48,14 +39,10 @@ class bitcoinVault {
 	 * constructs the main object
 	 */
 	public function __construct() {
-		$this->setActiveCoins();
-
 		try {
-			foreach (self::$_coinPool as $prefix => $port) {
-				// create the actual connection to bitcoind using the coin name
-				// usage: $this->bitcoin->(arg)
-				$this->{$prefix} = new jsonRPCClient('http://' . self::$_username . ':' . self::$_password . '@' . self::$_serveraddress . ':' . $port);
-			}
+			// create the actual connection to bitcoind using the coin name
+			// usage: $this->bitcoin->(arg)
+			$this->bitcoin = new jsonRPCClient('http://' . self::$_username . ':' . self::$_password . '@' . self::$_serveraddress . ':' . self::$_port);
 		} catch(Exception $e) {
 			throw new CoinException($e);
 		}
@@ -68,12 +55,6 @@ class bitcoinVault {
 		// $this->bitcoin->disconnect();
     }
 
-	/**
-	 * gathers our active coins set in pool
-	 */
-	protected function setActiveCoins() {
-		$this->activeCoins = array_keys(self::$_coinPool);
-	}
 
 	/**
 	 * provides singleton instance of our class
