@@ -33,9 +33,9 @@ class bitcoinVault {
 	 * !note: username/pass should be loaded in from disk
 	 * @var serveraddress: IP address of bitcoind
 	 */
-	private static $_username = "admin";
-	private static $_password = "password";
-	private static $_serveraddress = "10.10.200.111";
+	private static $_username = "tester";
+	private static $_password = "apple";
+	private static $_serveraddress = "0.0.0.0";
 
 	/**
 	 * @var algo: blowfish used for encryption
