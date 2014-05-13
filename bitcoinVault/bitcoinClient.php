@@ -7,11 +7,6 @@ use \Exception as CoinException;
 
 class bitcoinClient extends bitcoinVault {
 	/**
-	 * @var coinDict: array of shorthand
-	 */
-	protected $coinDict = array('bitcoin' => 'btc');
-
-	/**
 	 * @param  string $coin
 	 * @param  string $destination
 	 * @return backupWallet() response jSONrpc
@@ -25,8 +20,8 @@ class bitcoinClient extends bitcoinVault {
 	 * @param  string $coin
 	 * @return int last btc-e price * btc given
 	 */
-	public function convertCoinToUsd($price, $coin) {
-		$convert_url = "https://btc-e.com/api/2/" . $this->coinDict[$coin] . "_usd/ticker";
+	public function convertCoinToUsd($price) {
+		$convert_url = "https://btc-e.com/api/2/btc_usd/ticker";
 
 		// init curl
 		$ch = curl_init();
@@ -37,7 +32,6 @@ class bitcoinClient extends bitcoinVault {
 		curl_setopt($ch, CURLOPT_URL, $convert_url);
 
 		try {
-			// execute
 			$result = curl_exec($ch);
 			$prices = json_decode($result, true);
 
@@ -48,12 +42,13 @@ class bitcoinClient extends bitcoinVault {
 	}
 
 	/**
-	 * @param  string $coin
 	 * @param  string $account
 	 * @return getaccount() response jSONrpc
 	 */
-	public function getAccount($coin, $account) {
-		return $this->$coin->getaccount($account);
+	public function getAccount($account) {
+		if(!isset($account)) throw new CoinException("Account must be passed.", 1);
+
+		return $this->bitcoin->getaccount($account);
 	}
 
 	/**
@@ -61,53 +56,52 @@ class bitcoinClient extends bitcoinVault {
 	 * @param  string $account
 	 * @return getaccountaddress() response jSONrpc
 	 */
-	protected function getAccountAddress($coin, $account) {
+	protected function getAccountAddress($account) {
+		if(!isset($account)) throw new CoinException("Account must be passed.", 1);
+
 		try {
-			return $this->$coin->getaccountaddress($account);
+			return $this->bitcoin->getaccountaddress($account);
 		} catch (CoinException $e) {
 			throw $e;
 		}
 	}
 
 	/**
-	 * @param  string $coin
 	 * @param  string $account
 	 * @return getaddressesbyaccount() response jSONrpc
 	 */
-	public function getAddressesByAccount($coin, $account) {
+	public function getAddressesByAccount($account) {
+		if(!isset($account)) throw new CoinException("Account must be passed.", 1);
+
 		try {
-			return $this->$coin->getaddressesbyaccount($account);
+			return $this->bitcoin->getaddressesbyaccount($account);
 		} catch (CoinException $e) {
 			throw $e;
 		}
 	}
 
 	/**
-	 * @param  string $coin
 	 * @return getbalance() response jSONrpc
 	 */
-	public function getBalance($coin) {
-		return $this->$coin->getbalance($this->userWallet, 0);
+	public function getBalance() {
+		return $this->bitcoin->getbalance($this->userWallet, 0);
 	}
 
 	/**
-	 * @param  string $coin
 	 * @return getbalance() response jSONrpc
 	 */
-	public function getBalanceFiat($coin) {
-		return $this->convertCoinToUsd($this->$coin->getbalance($this->userWallet, 0), $coin);
+	public function getBalanceFiat() {
+		return $this->convertCoinToUsd($this->bitcoin->getbalance($this->userWallet, 0), 'bitcoin');
 	}
 
 	/**
-	 * @param  string $coin
 	 * @return getdifficulty() response jSONrpc
 	 */
-	public function getDifficulty($coin) {
-		return $this->$coin->getdifficulty();
+	public function getDifficulty() {
+		return $this->bitcoin->getdifficulty();
 	}
 
 	/**
-	 * @param  string $coin
 	 * @return getinfo() response jSONrpc
 	 */
 	public function getInfo() {
@@ -125,43 +119,45 @@ class bitcoinClient extends bitcoinVault {
 	}
 
 	/**
-	 * @param  array  $coins
 	 * @param  string $account
 	 * @return getnewaddress() response jSONrpc
 	 */
-	public function bulkGetNewAddress($coin, $account) {
+	public function bulkGetNewAddress($account) {
+		if(!isset($account)) throw new CoinException("Account must be passed.", 1);
+
 		try {
-			return $this->$coin->getnewaddress($account);
+			return $this->bitcoin->getnewaddress($account);
 		} catch(CoinException $e) {
 			throw $e;
 		}
 	}
 
 	/**
-	 * @param  string $coin
 	 * @param  string $account
 	 * @return getreceivedbyaddress() response jSONrpc
 	 */
-	public function getReceivedByAddress($coin, $account) {
-		return $this->$coin->getreceivedbyaddress($account);
+	public function getReceivedByAddress($account) {
+		if(!isset($account)) throw new CoinException("Account must be passed.", 1);
+
+		return $this->bitcoin->getreceivedbyaddress($account);
 	}
 
 	/**
-	 * @param  string $coin
 	 * calls listaccounts on {coin}d
 	 */
-	public function listAccounts($coin) {
-		foreach($this->$coin->listaccounts() as $account => $amount) {
+	public function listAccounts() {
+		foreach($this->bitcoin->listaccounts() as $account => $amount) {
 			echo (empty($account) ? '[null]' : $account) . ': ' . $amount . '<br />';
 		}
 	}
 
 	/**
-	 * @param  string $coin
 	 * @param  string $account
 	 * calls listtransactions on {coin}d
 	 */
-	public function listTransactions($coin, $account='') {
-		return $this->$coin->listtransactions($account);
+	public function listTransactions($account='') {
+		if(!isset($account)) throw new CoinException("Account must be passed.", 1);
+
+		return $this->bitcoin->listtransactions($account);
 	}
 }

@@ -12,7 +12,7 @@ class bitcoinVault {
 	private static $instance;
 
 	/**
-	 * @var {coin}: all possible/applicable coins
+	 * @var the one, the only bitcoin
 	 */
 	protected $bitcoin;
 
@@ -32,8 +32,8 @@ class bitcoinVault {
 	 * @var algo: blowfish used for encryption
 	 * @var cost: cost parameter
 	 */
-	private static $algo = '$2y';
-	private static $cost = '$10';
+	private static $_algo = '$2y';
+	private static $_cost = '$10';
 
 	/**
 	 * constructs the main object
@@ -52,7 +52,7 @@ class bitcoinVault {
 	 * used for cleanup
 	 */
 	public function __destruct() {
-		// $this->bitcoin->disconnect();
+		$this->bitcoin->stop();
     }
 
 
@@ -88,10 +88,7 @@ class bitcoinVault {
 	 * for more information on crypt: http://docs.php.net/manual/en/function.crypt.php
 	 */
 	public static function hash($password) {
-		return crypt($password,
-					self::$algo .
-					self::$cost .
-					'$' . self::unique_salt());
+		return crypt($password, self::$_algo . self::$_cost . '$' . self::unique_salt());
 	}
 }
 
