@@ -16,6 +16,20 @@ class bitcoinClient extends bitcoinVault {
 	}
 
 	/**
+	 * @param  string $account
+	 * @return getnewaddress() response jSONrpc
+	 */
+	public function bulkGetNewAddress($account) {
+		if(!isset($account)) throw new CoinException("Account must be passed.", 1);
+
+		try {
+			return $this->bitcoin->getnewaddress($account);
+		} catch(CoinException $e) {
+			throw $e;
+		}
+	}
+
+	/**
 	 * @param  int 	  $price
 	 * @param  string $coin
 	 * @return int last btc-e price * btc given
@@ -116,20 +130,6 @@ class bitcoinClient extends bitcoinVault {
 	 */
 	public function getInstance() {
 		return Parent::getInstance();
-	}
-
-	/**
-	 * @param  string $account
-	 * @return getnewaddress() response jSONrpc
-	 */
-	public function bulkGetNewAddress($account) {
-		if(!isset($account)) throw new CoinException("Account must be passed.", 1);
-
-		try {
-			return $this->bitcoin->getnewaddress($account);
-		} catch(CoinException $e) {
-			throw $e;
-		}
 	}
 
 	/**

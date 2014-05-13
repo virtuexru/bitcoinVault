@@ -40,8 +40,6 @@ class bitcoinVault {
 	 */
 	public function __construct() {
 		try {
-			// create the actual connection to bitcoind using the coin name
-			// usage: $this->bitcoin->(arg)
 			$this->bitcoin = new jsonRPCClient('http://' . self::$_username . ':' . self::$_password . '@' . self::$_serveraddress . ':' . self::$_port);
 		} catch(Exception $e) {
 			throw new CoinException($e);
