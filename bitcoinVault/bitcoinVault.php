@@ -7,11 +7,6 @@ use \Exception as CoinException;
 
 class bitcoinVault {
 	/**
-	 * @var instance: singleton instance of the class
-	 */
-	private static $instance;
-
-	/**
 	 * @var the one, the only bitcoin
 	 */
 	protected $bitcoin;
@@ -23,10 +18,10 @@ class bitcoinVault {
 	 * !note: username/pass should be loaded in from disk
 	 * @var serveraddress: IP address of bitcoind
 	 */
-	private static $_port = '8332';
-	private static $_username = "tester";
-	private static $_password = "apple";
-	private static $_serveraddress = "192.168.0.13";
+	protected static $_port = '8332';
+	protected static $_username = "tester";
+	protected static $_password = "apple";
+	protected static $_serveraddress = "192.168.0.13";
 
 	/**
 	 * @var algo: blowfish used for encryption
@@ -50,18 +45,8 @@ class bitcoinVault {
 	 * used for cleanup
 	 */
 	public function __destruct() {
-		$this->bitcoin->stop();
+		// $this->bitcoin->stop();
     }
-
-
-	/**
-	 * provides singleton instance of our class
-	 */
-	protected function getInstance() {
-		if(!self::$instance) self::$instance = new self();
-
-		return self::$instance;
-	}
 
 	/**
 	 * required salting for the password

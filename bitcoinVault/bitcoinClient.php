@@ -125,14 +125,6 @@ class bitcoinClient extends bitcoinVault {
 	}
 
 	/**
-	 * testing grabbing getInstance() [protected]
-	 * method from Parent [bitcoinVault] class
-	 */
-	public function getInstance() {
-		return Parent::getInstance();
-	}
-
-	/**
 	 * @param  string $account
 	 * @return getreceivedbyaddress() response jSONrpc
 	 */
